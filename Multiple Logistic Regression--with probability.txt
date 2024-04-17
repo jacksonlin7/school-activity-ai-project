@@ -1,0 +1,34 @@
+import numpy
+from sklearn import linear_model
+
+X = numpy.array([[-14,-19.5,63,19,25],[-13.7,-21.7,51,11,24.1],[-11.3,-19,53,7,19.3],[-10.2,-16.3,61,11,9.7],[-9.4,-15.5,61,13,19.3],[-16.9,-24.8,50,24,25],[-7.1,-14.4,56,11,25],[-9.2,-15.4,61,7,25],[-9.8,-15.7,62,9,25],[-9,-14.8,63,13,25]]).reshape(10,5)
+y = numpy.array([1,1,1,1,1,0,0,0,0,0])
+#1 : means snow
+#0 : means clear
+
+print(X)
+
+logr = linear_model.LogisticRegression()
+logr.fit(X,y)
+
+log_odds = logr.coef_ 
+odds = numpy.exp(log_odds)
+
+predicted = logr.predict(numpy.array([[-12,-18.9,56,19,25]]).reshape(1,5))
+print("[-12,-18.9,56,19,25] is (1 : snow,0 : clear) : ",predicted)
+
+predicted2 = logr.predict(numpy.array([[-8.9,-13.2,71,9,4.8]]).reshape(1,5))
+print("[-8.9,-13.2,71,9,4.8] is (1 : snow,0 : clear) : ",predicted2)
+
+
+
+def logit2prob(logr, X):
+  log_odds = logr.coef_[0][0] * X[0] + logr.coef_[0][1] * X[1] + logr.coef_[0][2] * X[2] + logr.coef_[0][3] * X[3]+ logr.coef_[0][4] * X[4] + logr.intercept_
+  odds = numpy.exp(log_odds)
+  probability = odds / (1 + odds)
+  return(probability)
+print("=====================================================")
+print("下雪的概率為 : ",logit2prob(logr, [-12,-18.9,56,19,25]))
+print("下雪的概率為 : ",logit2prob(logr, [-8.9,-13.2,71,9,4.8]))
+print(logr.coef_)
+print(logr.intercept_)

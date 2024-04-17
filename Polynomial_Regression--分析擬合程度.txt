@@ -1,0 +1,27 @@
+import sys
+import numpy
+from sklearn.metrics import r2_score
+import matplotlib.pyplot as plt
+
+x = [6,7,8,9,10,12,13,14,15,16,18]
+y = [98,95,93,90,80,76,70,76,78,79,90]
+
+mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))
+mymodel2 = numpy.poly1d(numpy.polyfit(x, y, 5))
+mymodel3 = numpy.poly1d(numpy.polyfit(x, y, 7))
+myline = numpy.linspace(6, 18, 100)
+plt.scatter(x, y)
+plt.plot(myline, mymodel(myline),color = 'r')
+plt.plot(myline, mymodel2(myline),color = 'b')
+plt.plot(myline, mymodel3(myline),color = 'g')
+plt.show()
+plt.savefig(sys.stdout.buffer)
+sys.stdout.flush()
+seven = mymodel(17)
+print("17歲學生的綜合考試分數為 : ",seven)
+print("關係式為 : ")
+print(mymodel)
+
+print(r2_score(y, mymodel(x)))
+print(r2_score(y, mymodel2(x)))
+print(r2_score(y, mymodel3(x)))
